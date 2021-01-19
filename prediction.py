@@ -1,16 +1,10 @@
 import numpy as np
 import os
 import re
-
-
-
-
 import keras
 import matplotlib.pyplot as plt
 from skimage.transform import resize
 from io import BytesIO
-
-
 import numpy as np
 from werkzeug.utils import secure_filename
 

@@ -30,7 +30,7 @@ def predict():
         photo = file[0]
         filename = secure_filename(photo.filename)
         photo.save(os.path.join(app.config['uploadFolder'], filename))
-        listName.append(Upload+filename)
+        listName.append(Upload+'/'+filename)
     #response base de ejecucion
     response = {"fireExists": False, "files":[]}
 
@@ -49,8 +49,8 @@ def predict():
             },
             topic="IA-PROJECT"
         )
-        response = messaging.send(message)
-        print(response)
+        resMens = messaging.send(message)
+        print(resMens)
 
     #se actualizan los valores de respuesta
     response["fireExists"] = len(resp) > 0
@@ -65,6 +65,4 @@ def predict():
 
                     
 if __name__ == "__main__":
-    app.run( debug = True, port=8080)
-
-                                
+    app.run(debug = True, port=8080)

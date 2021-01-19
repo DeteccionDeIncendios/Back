@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-
+from flask_cors import CORS
 
 
 from io import BytesIO
@@ -12,6 +12,7 @@ Upload =  os.path.join(THIS_FOLDER, 'upload')
 
 app = Flask(__name__)
 app.config['uploadFolder'] = Upload
+CORS(app)
 
 
 import firebase_admin
@@ -32,10 +33,10 @@ def predict():
         photo.save(os.path.join(app.config['uploadFolder'], filename))
         listName.append(Upload+'/'+filename)
     #response base de ejecucion
-    response = {"fireExists": False, "files":[]}
+    response = {"fireExists": False, "files":[], "label":"", "porcentaje":0}
 
     #se realiza la predccion y se retorna una lista de los archivos o fotos que sean de clase 'fuego'
-    resp = predictSimple(listName)
+    resp ,response["porcentaje"] = predictSimple(listName)
 
     #si existe alguna img de clase fuego se envia la notif a la app android
     if(len(resp) > 0):
@@ -55,6 +56,7 @@ def predict():
     #se actualizan los valores de respuesta
     response["fireExists"] = len(resp) > 0
     response["files"] = resp
+    response["label"] = "FIRE" if len(resp) > 0 else "NO FIRE"
 
     #se eliminan los archivos o img que se recibieron
     for file in listName:

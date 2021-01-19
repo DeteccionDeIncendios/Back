@@ -36,6 +36,7 @@ def predictSimple(listName):
     print(test_X)
     predicted_classes = model.predict(test_X)
     listResp = []
+    porcent=0
     for i, img_tagged in enumerate(predicted_classes):
         print("Imagen: ", listName[i])
         classDetected = clases[img_tagged.tolist().index(max(img_tagged))];
@@ -43,7 +44,8 @@ def predictSimple(listName):
         probability = max(img_tagged)*100
         print("Probabilidad: "+str(probability) + "%")
         print(listName[i], classDetected, probability)
+        porcent=probability
         if(classDetected == "fuego"):
             listResp.append({"fileName": listName[i], "probability":str(probability)})
         print("")
-    return listResp
+    return listResp, porcent

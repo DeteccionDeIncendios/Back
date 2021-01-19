@@ -1,12 +1,14 @@
 from flask import Flask, request, jsonify
-from keras.preprocessing import image
-import base64
-import json
+
+
+
 from io import BytesIO
 from prediction import predictSimple
 from werkzeug.utils import secure_filename
 import os
-Upload = './upload/'
+THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+
+Upload =  os.path.join(THIS_FOLDER, 'upload')
 
 app = Flask(__name__)
 app.config['uploadFolder'] = Upload
@@ -14,8 +16,8 @@ app.config['uploadFolder'] = Upload
 
 import firebase_admin
 from firebase_admin import credentials, messaging
-
-cred = credentials.Certificate("./iaproject-9cd7b-firebase-adminsdk-66qpu-3f5f300eff.json")
+my_file = os.path.join(THIS_FOLDER, 'iaproject-9cd7b-firebase-adminsdk-66qpu-3f5f300eff.json')
+cred = credentials.Certificate(my_file)
 firebase_admin.initialize_app(cred)
 
 
@@ -63,6 +65,6 @@ def predict():
 
                     
 if __name__ == "__main__":
-    app.run(debug = True, port=4000)
+    app.run( debug = True, port=8080)
 
                                 

@@ -1,8 +1,8 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
-#Install pipenv
 RUN apt-get update
-RUN apt-get install -y build-essential python3.6 python3.6-dev python3-pip python3.6-venv
+RUN apt-get install -y build-essential python3-pip
+
 
 #Create the working directory
 RUN set -ex && mkdir /app

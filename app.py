@@ -6,12 +6,18 @@ from io import BytesIO
 from prediction import predictSimple
 from werkzeug.utils import secure_filename
 import os
-THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+from PIL import Image
 
+THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+print("THIS_FOLDER: ",THIS_FOLDER)
 Upload =  os.path.join(THIS_FOLDER, 'upload')
+Upload_modified = os.path.join(THIS_FOLDER, 'upload_modificado')
+print("Upload: ",Upload)
+
 
 app = Flask(__name__)
 app.config['uploadFolder'] = Upload
+app.config['uploadFolderModified'] = Upload_modified
 CORS(app)
 
 
@@ -27,11 +33,15 @@ def predict():
 
     #se recibe el request y se guarda las fotos en la carpeta upload
     listName = []
+    listNameModified = []
     for file in request.files.listvalues():
         photo = file[0]
         filename = secure_filename(photo.filename)
         photo.save(os.path.join(app.config['uploadFolder'], filename))
-        listName.append(Upload+'/'+filename)
+        img = Image.open(os.path.join(app.config['uploadFolder'], filename)).convert("RGB")
+        img.save(os.path.join(app.config['uploadFolderModified'], "prueba.jpg" ))
+        listName.append(Upload_modified+'/'+"prueba.jpg")
+
     #response base de ejecucion
     response = {"fireExists": False, "files":[], "label":"", "porcentaje":0}
 
@@ -61,7 +71,11 @@ def predict():
     #se eliminan los archivos o img que se recibieron
     for file in listName:
         os.remove(file)
-    
+
+    #se eliminan los archivos o img modificados
+    for file in listNameModified:
+        os.remore(file)
+
     #se retorna la respuesta json
     return jsonify(response)
 
